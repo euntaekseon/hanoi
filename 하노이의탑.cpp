@@ -54,8 +54,6 @@ void init_game() {
         button[i] = Object::create(path, scene, button_x(i), 120);
         button[i]->setScale(1.3f);
         button[i]->setOnMouseCallback([&, i](auto, auto, auto, auto)->bool {
-            
-            timer->start();
 
             int j;
             int check = -1;
