@@ -1,12 +1,12 @@
-﻿#define _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <bangtal>
 using namespace bangtal;
 
 ScenePtr scene;
 ObjectPtr board[3][5], button[3];
-TimerPtr timer;
-int arr[3][5] = { 0 };
+
+int arr[3][5] = { 0 }, order[3];//order는 disk가 다른 축으로 옮겨질 때 나타날 세로 위치
 
 int index_to_x(int index) {
     return 140 - (index * 15);
@@ -23,7 +23,7 @@ int button_x(int index) {
 
 bool check_finish() {
     int i;
-    for ( i = 0;i < 5;i++) {
+    for (i = 0;i < 5;i++) {
         if (arr[2][i] == 0) return false;
     }
     if (arr[2][i] == 1) return true;//끝까지 다 1이 채워졌으면 성공
@@ -32,7 +32,9 @@ bool check_finish() {
 void init_game() {
 
     scene = Scene::create("하노이의 탑", "Images/하노이배경.png");
-    showMessage("아래 버튼을 클릭해서 원반을 움직이세요.");
+    showMessage("아래 버튼을 클릭해서 원반을 움직이세요.(1번에서 3번으로)");
+
+    order[0] = -1; order[1] = 4; order[2] = 4;
 
     char path[50];
     for (int i = 0;i < 5;i++) {//배열 첫 번째는 1로 채우고, 두번째/세번째는 0으로
@@ -46,9 +48,9 @@ void init_game() {
     }
 
     int flag = 0;//0이면 hide, 1이면 show
-    int disk = -1;//flag가 1이라서 원반을 보여줄 때, 보여줘야 할 disk의 위치
+    int disk = -1;//flag가 1이라서 원반을 보여줄 때, 보여줘야 할 disk의 위치 = j = disk의 종류
+    int origin = -1;//i
 
-    timer = Timer::create(2.0f);
     for (int i = 0;i < 3;i++) {
         sprintf(path, "Images/버튼%d.jpg", i + 1);
         button[i] = Object::create(path, scene, button_x(i), 120);
@@ -63,7 +65,7 @@ void init_game() {
                     if (arr[i][j] == 1) {
                         arr[i][j] = 0;
                         board[i][j]->hide();
-                        flag = 1; disk = j;
+                        flag = 1; disk = j; order[i] += 1;
                         break;
                     }
                 }
@@ -71,13 +73,15 @@ void init_game() {
             else if (flag == 1) {//원반 보여줄 차례 - 위에 arr에 이미 1이 있다면 메세지로 옮길 수 없습니다 출력
                 for (j = 0;j < disk;j++) {
                     if (arr[i][j] == 1) {//원반을 옮기지 못 하는 경우
-                        showMessage("원반을 옮길 수 없습니다."); 
+                        showMessage("원반을 옮길 수 없습니다.");
                         break;
                     }
                 }
                 if (arr[i][j] == 0 && arr[i][disk] == 0) {
                     arr[i][disk] = 1;
+                    board[i][disk]->locate(scene, index_to_x(disk) + 270 * i, index_to_y(order[i]));//i가 0일 때만 보완하면 될 것 같은데
                     board[i][disk]->show();
+                    order[i] -= 1;//다음에 위치할 축으로 위치 조정
                     flag = 0; disk = -1;
                 }
             }
@@ -89,7 +93,7 @@ void init_game() {
             return true;
             });
 
-        
+
     }
     startGame(scene);
 }
@@ -103,8 +107,6 @@ int main()
     setGameOption(GameOption::GAME_OPTION_MESSAGE_BOX_BUTTON, false);
 
     init_game();
-
- 
 
     return 0;
 }
