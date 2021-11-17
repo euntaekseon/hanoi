@@ -76,6 +76,7 @@ void init_game() {
                         board1[i][disk]->show();
                         order[i] -= 1;//다음에 위치할 축으로 위치 조정
                         flag = 0; disk = -1; count++;
+                        printf("\nnow count: %d", count);
                     }
                 }
             }
@@ -105,6 +106,7 @@ void init_game() {
                         board2[i][disk]->show();
                         order[i] -= 1;//다음에 위치할 축으로 위치 조정
                         flag = 0; disk = -1; count++;
+                        printf("\nnow count: %d", count);
                     }
                 }
 
