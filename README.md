@@ -18,4 +18,4 @@
 3. start_game  
 -> 역할 = 실질적으로 게임이 진행되는 부분(init_game에서 넘어올 때 scene 이미지가 전환되어 넘어옴)     
 : restart 버튼 생성 -> 클릭하면 2번 init_game으로 이동  
-: 실제 원반 이동(2번에서 hide했던 button/board[0]보여준 후에 게임 실행)  
+: 실제 원반 이동(2번에서 hide했던 button/원반board[0]를 보여준 후에 게임 실행)  
