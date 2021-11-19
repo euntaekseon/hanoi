@@ -1,4 +1,4 @@
-## hanoi 간단한 코드 설명
+## hanoi 코드
 
 전체적인 코드 실행 순서: main -> init_game -> start_game
 
